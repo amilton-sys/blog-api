@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class GerenciaApiApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(GerenciaApiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(GerenciaApiApplication.class, args);
+    }
 
 }
