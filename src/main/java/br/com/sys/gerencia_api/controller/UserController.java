@@ -3,7 +3,6 @@ package br.com.sys.gerencia_api.controller;
 import br.com.sys.gerencia_api.model.RequestCreateUser;
 import br.com.sys.gerencia_api.model.ResponseCreateUser;
 import br.com.sys.gerencia_api.model.ResponseUserDetail;
-import br.com.sys.gerencia_api.model.User;
 import br.com.sys.gerencia_api.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
@@ -37,7 +36,7 @@ public class UserController {
     @GetMapping("/users")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<Page<ResponseUserDetail>> listUsers(@PageableDefault(
-            sort = "username") Pageable pageable) {
+            sort = {"username"}) Pageable pageable) {
         var users = userService.listUsers(pageable)
                 .map(ResponseUserDetail::new);
         return ResponseEntity.ok().body(users);
