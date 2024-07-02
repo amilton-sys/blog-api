@@ -1,4 +1,4 @@
-package br.com.sys.gerencia_api.model;
+package br.com.sys.gerencia_api.domain.model.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;

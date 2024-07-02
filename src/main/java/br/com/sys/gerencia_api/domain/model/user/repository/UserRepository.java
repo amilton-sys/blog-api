@@ -1,6 +1,6 @@
-package br.com.sys.gerencia_api.repository;
+package br.com.sys.gerencia_api.domain.model.user.repository;
 
-import br.com.sys.gerencia_api.model.User;
+import br.com.sys.gerencia_api.domain.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

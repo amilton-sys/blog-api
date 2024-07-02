@@ -1,10 +1,10 @@
-package br.com.sys.gerencia_api.service;
+package br.com.sys.gerencia_api.service.user;
 
-import br.com.sys.gerencia_api.model.RequestLogin;
-import br.com.sys.gerencia_api.model.ResponseLogin;
-import br.com.sys.gerencia_api.model.Role;
-import br.com.sys.gerencia_api.repository.UserRepository;
-import org.springframework.http.ResponseEntity;
+import br.com.sys.gerencia_api.domain.model.user.dto.RequestLogin;
+import br.com.sys.gerencia_api.domain.model.user.dto.ResponseLogin;
+import br.com.sys.gerencia_api.domain.model.user.Role;
+import br.com.sys.gerencia_api.domain.model.user.repository.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -21,8 +21,8 @@ public class AuthenticationService {
     private final JwtEncoder jwtEncoder;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final static String ISSUER = "Gerencia API";
-    private final static String CLAIM_NAME = "scope";
+    private static final String ISSUER = "Gerencia API";
+    private static final String CLAIM_NAME = "scope";
 
     public AuthenticationService(JwtEncoder jwtEncoder, UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.jwtEncoder = jwtEncoder;
@@ -30,10 +30,10 @@ public class AuthenticationService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public ResponseLogin login(@RequestBody RequestLogin requestLogin) {
+    public ResponseLogin login(@RequestBody @Valid RequestLogin requestLogin) {
         var user = userRepository.findByEmail(requestLogin.email());
         if (user.isEmpty() || !user.get().isLoginCorret(requestLogin, passwordEncoder)) {
-            throw new BadCredentialsException("user or password is invalid!");
+            throw new BadCredentialsException("User or password is invalid!");
         }
 
         var now = Instant.now();
@@ -54,6 +54,6 @@ public class AuthenticationService {
 
         var jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
-        return new ResponseLogin(jwtValue,expiresIn);
+        return new ResponseLogin(jwtValue, expiresIn);
     }
 }

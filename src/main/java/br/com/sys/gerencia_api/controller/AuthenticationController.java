@@ -1,8 +1,9 @@
 package br.com.sys.gerencia_api.controller;
 
-import br.com.sys.gerencia_api.model.RequestLogin;
-import br.com.sys.gerencia_api.model.ResponseLogin;
-import br.com.sys.gerencia_api.service.AuthenticationService;
+import br.com.sys.gerencia_api.domain.model.user.dto.RequestLogin;
+import br.com.sys.gerencia_api.domain.model.user.dto.ResponseLogin;
+import br.com.sys.gerencia_api.service.user.AuthenticationService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +19,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseLogin> signIn(@RequestBody RequestLogin requestLogin) {
+    public ResponseEntity<ResponseLogin> signIn(@RequestBody @Valid RequestLogin requestLogin) {
         return ResponseEntity.ok(authenticationService.login(requestLogin));
     }
 }
