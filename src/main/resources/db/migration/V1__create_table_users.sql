@@ -24,7 +24,10 @@ CREATE TABLE tb_users_roles
 CREATE TABLE tb_posts
 (
     post_id            BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title              VARCHAR(255) NOT NULL,
+    description        VARCHAR(255) NOT NULL,
     content            TEXT         NOT NULL,
+    thumb              VARCHAR(255),
     author_id          BINARY(16),
     creation_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (author_id) REFERENCES tb_users (user_id)

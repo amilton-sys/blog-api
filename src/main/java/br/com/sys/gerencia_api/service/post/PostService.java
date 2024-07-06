@@ -4,8 +4,10 @@ import br.com.sys.gerencia_api.domain.model.post.Post;
 import br.com.sys.gerencia_api.domain.model.post.dto.RequestPost;
 import br.com.sys.gerencia_api.domain.model.post.dto.ResponseFeed;
 import br.com.sys.gerencia_api.domain.model.post.dto.ResponseFeedItem;
+import br.com.sys.gerencia_api.domain.model.post.dto.ResponseFeedItemDetail;
 import br.com.sys.gerencia_api.domain.model.post.repository.PostRepository;
 import br.com.sys.gerencia_api.domain.model.user.Role;
+import br.com.sys.gerencia_api.service.exception.PostNotFoundException;
 import br.com.sys.gerencia_api.service.user.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -14,6 +16,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -30,7 +33,12 @@ public class PostService {
     public void createPost(RequestPost dto, JwtAuthenticationToken token) {
         var user = userService.findById(UUID.fromString(token.getName()));
         var post = new Post();
+        post.setTitle(dto.title());
+        post.setDescription(dto.description());
         post.post(user, dto.content());
+        if(Objects.nonNull(dto.thumb())){
+            post.setThumb(dto.thumb());
+        }
         postRepository.save(post);
     }
 
@@ -65,5 +73,10 @@ public class PostService {
                 .map(ResponseFeedItem::new);
 
         return new ResponseFeed(posts.toList());
+    }
+
+    public ResponseFeedItemDetail getPostById(Long id) {
+        var posts = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException("Post not found"));
+        return new ResponseFeedItemDetail(posts);
     }
 }

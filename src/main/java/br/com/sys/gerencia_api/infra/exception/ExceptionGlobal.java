@@ -3,6 +3,7 @@ package br.com.sys.gerencia_api.infra.exception;
 import br.com.sys.gerencia_api.service.exception.CodeAlreadyInUseException;
 import br.com.sys.gerencia_api.service.exception.CodeExpiredException;
 import br.com.sys.gerencia_api.service.exception.InvalidCodeException;
+import br.com.sys.gerencia_api.service.exception.PostNotFoundException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,11 @@ import java.util.List;
 
 @RestControllerAdvice
 public class ExceptionGlobal {
+
+    @ExceptionHandler(PostNotFoundException.class)
+    public ResponseEntity<String> postNotFound(PostNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
 
     @ExceptionHandler(CodeExpiredException.class)
     public ResponseEntity<String> codeExpiredException(CodeExpiredException e) {
