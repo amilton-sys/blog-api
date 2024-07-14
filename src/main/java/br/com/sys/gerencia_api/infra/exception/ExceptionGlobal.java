@@ -4,6 +4,7 @@ import br.com.sys.gerencia_api.service.exception.CodeAlreadyInUseException;
 import br.com.sys.gerencia_api.service.exception.CodeExpiredException;
 import br.com.sys.gerencia_api.service.exception.InvalidCodeException;
 import br.com.sys.gerencia_api.service.exception.PostNotFoundException;
+import com.google.gson.Gson;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @RestControllerAdvice
 public class ExceptionGlobal {
+    private final Gson gson = new Gson();
 
     @ExceptionHandler(PostNotFoundException.class)
     public ResponseEntity<String> postNotFound(PostNotFoundException e) {
@@ -51,8 +53,9 @@ public class ExceptionGlobal {
     }
 
     @ExceptionHandler(EntityExistsException.class)
-    public ResponseEntity<String> entityExists(EntityExistsException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    public ResponseEntity<String> entityAlreadyExists(EntityExistsException e) {
+        var error = gson.toJson(e.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

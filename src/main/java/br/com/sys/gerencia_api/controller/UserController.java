@@ -4,6 +4,7 @@ import br.com.sys.gerencia_api.domain.model.user.dto.RequestCreateUser;
 import br.com.sys.gerencia_api.domain.model.user.dto.ResponseCreateUser;
 import br.com.sys.gerencia_api.domain.model.user.dto.ResponseUserDetail;
 import br.com.sys.gerencia_api.service.user.UserService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -14,7 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("/users")
 public class UserController {
     private final UserService userService;
 
@@ -23,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseCreateUser> newUser(@RequestBody RequestCreateUser dto, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<ResponseCreateUser> newUser(@RequestBody @Valid RequestCreateUser dto, UriComponentsBuilder uriBuilder) {
         var user = userService.newUser(dto);
         var uri = uriBuilder.path("/users/{id}").buildAndExpand(user.getUserId()).toUri();
         return ResponseEntity.created(uri).body(new ResponseCreateUser(user));
